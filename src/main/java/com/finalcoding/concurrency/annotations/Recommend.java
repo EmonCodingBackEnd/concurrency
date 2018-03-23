@@ -18,7 +18,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 课程里用来标记【线程安全】的类或者写法.
+ * 课程里用来标记【推荐】的类或者写法.
  *
  * <p>创建时间: <font style="color:#00FFFF">20180323 08:32</font><br>
  * [请在此输入功能详述]
@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
-public @interface ThreadSafe {
+public @interface Recommend {
 
     String value() default "";
 }
