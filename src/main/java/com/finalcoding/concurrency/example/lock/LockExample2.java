@@ -34,7 +34,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 @Slf4j
 @ThreadSafe
-public class LockExxample1 {
+public class LockExample2 {
 
     // 请求总数
     public static final int clientTotal = 5000;

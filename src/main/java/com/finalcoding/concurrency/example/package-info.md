@@ -175,5 +175,111 @@
     - 提供了一个Condition类，可以分组唤醒需要唤醒的线程
     - 提供了能够中断等待锁的线程的机制，lock.lockInterruptibly()
 
-  ​
 
+### 4.3 J.U.C之FutureTask
+
+- Callable与Runnable接口对比
+- Future接口
+- FutureTask类
+
+
+
+### 4.4 Fork/Join框架
+
+
+
+### 4.5 BlockingQueue
+
+| -       | Thros Excepion | Special Value | Blocks | Times Out                   |
+| ------- | -------------- | ------------- | ------ | --------------------------- |
+| Insert  | add(o)         | offer(o)      | put(o) | offer(o, timeout, timeuint) |
+| Remove  | remove(o)      | poll()        | take() | poll(timeout, timeunit)     |
+| Examine | element()      | peek()        |        |                             |
+
+- ArrayBlockingQueue
+  - FIFO
+- DelayQueue
+- LinkedBlockingQueue
+  - FIFO
+- PriorityBlockingQueue
+  - 带有优先级的队列
+- SynchronousQueue
+  - 无界非缓存队列
+
+
+
+## 五、线程池
+
+- new Thread弊端
+  - 每次new Thread新建对象，性能差
+  - 线程缺乏统一管理，可能无限制的新建线程，相互竞争，有可能占用过多系统资源导致死机或OOM
+  - 缺少更多功能，如更多执行、定期执行、线程中断
+- 线程池的好处
+  - 重用存在的线程，减少对象创建、消亡的开销，性能佳
+  - 可有效控制最大并发线程的数量，提高系统资源利用率，同时可避免过多资源竞争，避免阻塞
+  - 提供定时执行、定期执行、单线程、并发数控制等功能
+
+
+
+### 5.1 ThreadPoolExecutor
+
+- corePoolSize:核心线程数量
+- maximumPoolSize:线程最大线程数
+- workQueue:阻塞队列，存储等待执行的任务，很重要，会对线程池运行过程产生重大影响
+- keepAliveTime:线程没有任务执行时最多保持多久时间终止
+- unit:keepAliveTime的时间单位
+- threadFactory:线程工厂，用来创建线程
+- rejectHandler:当拒绝处理任务时的策略
+  - 抛异常（默认）
+  - 用调用者所在的线程来执行任务
+  - 丢弃队列中最靠前的任务，来执行当前任务
+  - 直接丢弃当前的任务
+
+
+
+### 5.2 ThreadPoolExecutor状态
+
+- RUNNING
+- SHUTDOWN
+- STOP
+- TIDYING
+- TERMINATED
+
+ThreadPoolExecutor方法
+
+### 5.3 ThreadPoolExecutor
+
+- execute():提交任务，交给线程池执行
+- submit():提交任务，能够返回执行结果  execute + Future
+- shutdown():关闭线程池，等待任务都执行完
+- shutdownNow():关闭线程池，不等待任务执行完
+- getTaskCount():线程池已经执行和未执行的任务总数
+- getCompletedTaskCount():已完成的任务数量
+- getPoolSize():线程池当前的线程数量
+- getActiveCount():当前线程池中正在执行任务的线程数量
+
+
+
+### 5.4 Executor空间接口
+
+- Executors.newCachedThreadPool
+- Executors.newFixedThreadPool
+- Executors.newScheduledThreadPool
+- Executors.newSingleThreadExecutor
+
+
+
+### 5.5 合理配置
+
+- CPU密集型任务，就需要尽量压榨CPU，参考值可以设为NCPU+1
+- IO密集型任务，参考值可以设为2*NCPU
+
+
+
+## 六、死锁
+
+- 死锁发生的必要条件
+  - 互斥条件
+  - 请求和保持条件
+  - 不剥夺条件
+  - 环路等待条件
