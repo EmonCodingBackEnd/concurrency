@@ -40,7 +40,7 @@ public class CountExample2 {
     public static final int  clientTotal = 5000;
 
     // 同时并发执行的线程数
-    public static final int threadTotal = 20;
+    public static final int threadTotal = 200;
 
     public static AtomicInteger count = new AtomicInteger(0);
 

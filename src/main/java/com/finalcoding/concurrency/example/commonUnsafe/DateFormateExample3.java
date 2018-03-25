@@ -1,31 +1,34 @@
 /*
- * 文件名称：ConcurrencyTest.java
+ * 文件名称：DateFormateExample1.java
  * 系统名称：[系统名称]
  * 模块名称：[模块名称]
  * 软件版权：Copyright (c) 2011-2018, liming20110711@163.com All Rights Reserved.
  * 功能说明：[请在此处输入功能说明]
  * 开发人员：Rushing0711
- * 创建日期：20180324 07:52
+ * 创建日期：20180325 19:41
  * 修改记录：
  * <Version>        <DateSerial>        <Author>        <Description>
- * 1.0.0            20180324-01         Rushing0711     M201803240752 新建文件
+ * 1.0.0            20180325-01         Rushing0711     M201803251941 新建文件
  ********************************************************************************/
-package com.finalcoding.concurrency.example.atomic;
+package com.finalcoding.concurrency.example.commonUnsafe;
 
 import com.finalcoding.concurrency.annotations.ThreadSafe;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.LongAdder;
 
 /**
  * [请在此输入功能简述].
  *
- * <p>创建时间: <font style="color:#00FFFF">20180324 07:52</font><br>
+ * <p>创建时间: <font style="color:#00FFFF">20180325 19:42</font><br>
  * [请在此输入功能详述]
  *
  * @author Rushing0711
@@ -34,7 +37,7 @@ import java.util.concurrent.atomic.LongAdder;
  */
 @Slf4j
 @ThreadSafe
-public class AtomicExample3 {
+public class DateFormateExample3 {
 
     // 请求总数
     public static final int clientTotal = 5000;
@@ -42,18 +45,19 @@ public class AtomicExample3 {
     // 同时并发执行的线程数
     public static final int threadTotal = 200;
 
-    public static LongAdder count = new LongAdder();
+    private static DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyyMMdd");
 
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newCachedThreadPool();
         final Semaphore semaphore = new Semaphore(threadTotal);
         final CountDownLatch countDownLatch = new CountDownLatch(clientTotal);
         for (int i = 0; i < clientTotal; i++) {
+            final int count = i;
             executorService.execute(
                     () -> {
                         try {
                             semaphore.acquire();
-                            add();
+                            update(count);
                             semaphore.release();
                         } catch (InterruptedException e) {
                             log.error("exception", e);
@@ -63,10 +67,9 @@ public class AtomicExample3 {
         }
         countDownLatch.await();
         executorService.shutdown();
-        log.info("count:{}", count);
     }
 
-    private static void add() {
-        count.increment();
+    private static void update(int count) {
+        log.info("{}, {}", count, DateTime.parse("20180325", dateTimeFormatter).toDate());
     }
 }

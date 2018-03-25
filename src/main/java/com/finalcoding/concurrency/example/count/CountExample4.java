@@ -10,17 +10,15 @@
  * <Version>        <DateSerial>        <Author>        <Description>
  * 1.0.0            20180324-01         Rushing0711     M201803240752 新建文件
  ********************************************************************************/
-package com.finalcoding.concurrency.example.atomic;
+package com.finalcoding.concurrency.example.count;
 
-import com.finalcoding.concurrency.annotations.ThreadSafe;
+import com.finalcoding.concurrency.annotations.NotThreadSafe;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.LongAdder;
 
 /**
  * [请在此输入功能简述].
@@ -33,40 +31,43 @@ import java.util.concurrent.atomic.LongAdder;
  * @since 1.0.0
  */
 @Slf4j
-@ThreadSafe
-public class AtomicExample3 {
+@NotThreadSafe
+public class CountExample4 {
 
     // 请求总数
-    public static final int clientTotal = 5000;
+    public static final int  clientTotal = 5000;
 
     // 同时并发执行的线程数
     public static final int threadTotal = 200;
 
-    public static LongAdder count = new LongAdder();
+    public static volatile int count = 0;
 
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newCachedThreadPool();
         final Semaphore semaphore = new Semaphore(threadTotal);
         final CountDownLatch countDownLatch = new CountDownLatch(clientTotal);
         for (int i = 0; i < clientTotal; i++) {
-            executorService.execute(
-                    () -> {
-                        try {
-                            semaphore.acquire();
-                            add();
-                            semaphore.release();
-                        } catch (InterruptedException e) {
-                            log.error("exception", e);
-                        }
-                        countDownLatch.countDown();
-                    });
+            executorService.execute(() -> {
+                try {
+                    semaphore.acquire();
+                    add();
+                    semaphore.release();
+                } catch (InterruptedException e) {
+                    log.error("exception", e);
+                }
+                countDownLatch.countDown();
+            });
         }
         countDownLatch.await();
         executorService.shutdown();
         log.info("count:{}", count);
+
     }
 
     private static void add() {
-        count.increment();
+        count++;
+        // 1、count
+        // 2、+1
+        // 3、count
     }
 }

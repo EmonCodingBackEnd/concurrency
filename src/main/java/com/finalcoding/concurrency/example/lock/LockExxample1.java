@@ -10,7 +10,7 @@
  * <Version>        <DateSerial>        <Author>        <Description>
  * 1.0.0            20180324-01         Rushing0711     M201803240752 新建文件
  ********************************************************************************/
-package com.finalcoding.concurrency.example.atomic;
+package com.finalcoding.concurrency.example.lock;
 
 import com.finalcoding.concurrency.annotations.ThreadSafe;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +19,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.LongAdder;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * [请在此输入功能简述].
@@ -34,7 +34,7 @@ import java.util.concurrent.atomic.LongAdder;
  */
 @Slf4j
 @ThreadSafe
-public class AtomicExample3 {
+public class LockExxample1 {
 
     // 请求总数
     public static final int clientTotal = 5000;
@@ -42,7 +42,9 @@ public class AtomicExample3 {
     // 同时并发执行的线程数
     public static final int threadTotal = 200;
 
-    public static LongAdder count = new LongAdder();
+    public static int count = 0;
+
+    private static final Lock lock = new ReentrantLock();
 
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newCachedThreadPool();
@@ -67,6 +69,11 @@ public class AtomicExample3 {
     }
 
     private static void add() {
-        count.increment();
+        lock.lock();
+        try {
+            count++;
+        } finally {
+            lock.unlock();
+        }
     }
 }
