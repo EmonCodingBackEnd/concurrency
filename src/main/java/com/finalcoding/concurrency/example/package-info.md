@@ -260,7 +260,7 @@ ThreadPoolExecutor方法
 
 
 
-### 5.4 Executor空间接口
+### 5.4 Executor框架接口
 
 - Executors.newCachedThreadPool
 - Executors.newFixedThreadPool
@@ -276,10 +276,87 @@ ThreadPoolExecutor方法
 
 
 
-## 六、死锁
+## 六、多线程并发拓展
+
+### 6.1 死锁
 
 - 死锁发生的必要条件
   - 互斥条件
   - 请求和保持条件
   - 不剥夺条件
   - 环路等待条件
+
+
+
+### 6.2 多线程并发最佳实践
+
+- 使用本地变量
+- 使用不可变类
+- 最小化锁的作用域范围：S=1/(1-a+a/n)
+- 使用线程池的Executor，而不是直接new Thread执行
+- 宁可使用同步也不要使用线程的wait和notify方法
+- 使用BlockingQueue实现生产-消费模式
+- 使用并发集合而不是加了锁的同步集合
+- 使用Semaphore创建有界的访问
+- 宁可使用同步代码块，也不使用同步的方法
+- 避免使用静态变量
+
+
+
+### 6.3 Spring与线程安全
+
+- Spring bean：Singleton、Prototype
+- 无状态对象
+
+
+
+### 6.4 HashMap与Concurrent HashMap
+
+
+
+### 6.5 多线程并发与线程安全总结
+
+- 线程安全性
+  - 原子性
+  - 可见性
+  - 有序性
+  - atomic包
+  - CAS算法
+  - synchronized与Lock
+  - volatile
+  - happens-before
+- 安全发布对象
+  - 安全发布方法
+  - 不可变对象
+  - final关键字使用
+  - 不可变方法
+  - 线程不安全类与写法
+- 线程封闭同步容器并发容器
+  - 堆栈封闭
+  - ThreadLocal线程封闭
+  - JDBC的线程封闭
+  - 同步容器
+  - 并发容器
+  - J.U.C
+- AQS等J.U.C组件
+  - CauntDownLatch
+  - Semaphore
+  - CyclicBarries
+  - ReentrantLock与锁
+  - Condition
+  - FutureTask
+  - Fork/Join框架
+  - BlockingQueue
+- 线程调度
+  - new Thread弊端
+  - 线程池的好处
+  - ThreadPoolExecutor
+  - Executor框架接口
+- 线程安全补充内容
+  - 死锁的产生于预防
+  - 多线程并发最佳实践
+  - Spring的线程安全
+  - HashMap与ConcurrentHashMap深入讲解
+
+
+
